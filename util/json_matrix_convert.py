@@ -1,4 +1,3 @@
-import request_exchange_rate
 from request_exchange_rate import RequestExchangeRate
 from util.json_persistence import JsonPersistence
 
@@ -12,7 +11,8 @@ class JsonMatrixConvert:
         return matrix
 
     @staticmethod
-    def request_rate_to_matrix(rates):
+    def request_rate_to_matrix():
+        rates = RequestExchangeRate.batch_request_exchange_rate()
         index = 0
         matrix = []
         for rate in rates:
@@ -23,17 +23,20 @@ class JsonMatrixConvert:
         return matrix
 
 
-
-
 if __name__ == '__main__':
-    # # batch request exchange rate
-    # json = JsonMatrixConvert.batch_request_exchange_rate()
-    # # add timestamp and save to file
-    # json_with_timestamp = {json}
-    # json_with_timestamp = json_with_timestamp.append({'timestamp': datetime.datetime.timestamp()})
-    # JsonPersistence.save_json(json_with_timestamp, './test.json')
+    # batch request exchange rate
+    requested_json = RequestExchangeRate.batch_request_exchange_rate()
+    print(requested_json)
+    JsonPersistence.save_json(requested_json, './test.json')
 
     # load json from file
-    file = open('./test.json', 'r')
-    json = file.read()
-    json = json
+    # file = open('./test.json', 'r')
+    # cached_json = file.read()
+    # # string to json
+    # cached_json = str(cached_json)
+    # cached_json = json.loads(cached_json)
+    # print(cached_json)
+    #
+    # cached_json = JsonMatrixConvert.convert_to_array(cached_json)
+    #
+    # print(cached_json)

@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 
 
@@ -30,14 +32,18 @@ class RequestExchangeRate:
 
     @staticmethod
     def batch_request_exchange_rate():
-        rates = {}
+        date = datetime.datetime.now()
+        rates = []
+
         for currency in RequestExchangeRate.currencies:
             change_rate_json = RequestExchangeRate.get_response(RequestExchangeRate.get_url(currency)).json()
-            rates[currency] = change_rate_json['rates']
-        return rates
+            r = change_rate_json['rates']
+            r['base'] = currency
+            rates.append(r)
+
+        r = {"rate": rates, "date": str(date.date())}
+        return r
 
 
 if __name__ == '__main__':
-    url = RequestExchangeRate.get_url('USD')
-    response = RequestExchangeRate.get_response(url)
-    print(response.text)
+    print(datetime.datetime.now().date())

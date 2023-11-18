@@ -5,8 +5,8 @@ class JsonPersistence:
     @staticmethod
     def save_json(json_dict, file_path):
         with open(file_path, 'w') as f:
-            json.dump(json_dict, f)
-        print('save json to ' + file_path)
+            j = json.dumps(json_dict)
+            f.write(j)
 
     @staticmethod
     def load_json(file_path):
