@@ -43,7 +43,3 @@ class RequestExchangeRate:
 
         r = {"rate": rates, "date": str(date.date())}
         return r
-
-
-if __name__ == '__main__':
-    print(datetime.datetime.now().date())

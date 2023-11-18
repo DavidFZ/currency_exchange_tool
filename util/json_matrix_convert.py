@@ -1,4 +1,4 @@
-from request_exchange_rate import RequestExchangeRate
+from util.request_exchange_rate import RequestExchangeRate
 from util.json_persistence import JsonPersistence
 
 
