@@ -7,36 +7,26 @@ class JsonMatrixConvert:
     def convert_to_array(json_dict):
         matrix = []
         for key in json_dict:
-            matrix.append(json_dict[key])
+            if key != 'base':
+                matrix.append(json_dict[key])
         return matrix
 
     @staticmethod
-    def request_rate_to_matrix():
-        rates = RequestExchangeRate.batch_request_exchange_rate()
+    def json_to_matrix(rates):
         index = 0
         matrix = []
         for rate in rates:
-            change_rate_array = JsonMatrixConvert.convert_to_array(rate['rates'])
+            change_rate_array = JsonMatrixConvert.convert_to_array(rate)
             change_rate_array.insert(index, 1)
             matrix.append(change_rate_array)
             index += 1
         return matrix
 
+    @staticmethod
+    def get_latest_cached_matrix():
+        cached_json = JsonPersistence.load_latest_json()['rate']
+        return JsonMatrixConvert.json_to_matrix(cached_json)
+
 
 if __name__ == '__main__':
-    # batch request exchange rate
-    requested_json = RequestExchangeRate.batch_request_exchange_rate()
-    print(requested_json)
-    JsonPersistence.save_json(requested_json, './test.json')
-
-    # load json from file
-    # file = open('./test.json', 'r')
-    # cached_json = file.read()
-    # # string to json
-    # cached_json = str(cached_json)
-    # cached_json = json.loads(cached_json)
-    # print(cached_json)
-    #
-    # cached_json = JsonMatrixConvert.convert_to_array(cached_json)
-    #
-    # print(cached_json)
+    print(JsonMatrixConvert.get_latest_cached_matrix())
