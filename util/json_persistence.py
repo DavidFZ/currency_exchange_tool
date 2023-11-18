@@ -26,7 +26,7 @@ class JsonPersistence:
     @staticmethod
     def load_latest_json():
         file_name = TimeUtil.get_current_date() + ".json"
-        file_name = "../data/" + file_name
+        file_name = "./data/" + file_name
         return JsonPersistence.load_json(file_name)
 
 

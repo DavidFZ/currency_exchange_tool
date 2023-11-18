@@ -1,3 +1,57 @@
+import numpy as np
+
+from util.json_matrix_convert import JsonMatrixConvert
+from util.request_exchange_rate import RequestExchangeRate
+
+
+def detect_negative_cycle(currencies, matrix):
+    # bellman-ford algorithm
+    for i in range(len(currencies)):
+        dis = [float("inf")] * len(currencies)
+        dis[i] = 0
+        pre = [-1] * len(currencies)
+
+        for i in range(len(currencies)):
+            for j in range(len(currencies)):
+                if dis[j] > dis[i] + matrix[i][j]:
+                    dis[j] = dis[i] + matrix[i][j]
+                    pre[j] = i
+
+        for i in range(len(currencies)):
+            for j in range(len(currencies)):
+                if dis[j] > dis[i] + matrix[i][j]:
+                    print("There exists arbitrage opportunity in this currency exchange system.")
+                    exit(1)
+
+
+def detect_negative_cycle(adjacency_matrix, source_node_index):
+    # bellman-ford algorithm
+    dis = [float("inf")] * len(adjacency_matrix)
+    dis[source_node_index] = 0
+    pre = [-1] * len(adjacency_matrix)
+
+    for i in range(len(currencies)):
+        for j in range(len(currencies)):
+            if dis[j] > dis[i] + adjacency_matrix[i][j]:
+                dis[j] = dis[i] + adjacency_matrix[i][j]
+                pre[j] = i
+
+    for i in range(len(currencies)):
+        for j in range(len(currencies)):
+            if dis[j] > dis[i] + adjacency_matrix[i][j]:
+                print("There exists arbitrage opportunity in this currency exchange system.")
+                return True
+
+    return False
+
+
 if __name__ == '__main__':
-    # print("HELLO WORLD")
-    str = '''{'rate': [{'USD': 0.138683, 'EUR': 0.12704, 'JPY': 20.737925, 'GBP': 0.111329, 'AUD': 0.212932, 'CAD': 0.190294, 'HKD': 1.081344, 'NZD': 0.231292, 'base': 'CNY'}, {'CNY': 7.210704, 'EUR': 0.91605, 'JPY': 149.53504, 'GBP': 0.802762, 'AUD': 1.535391, 'CAD': 1.37215, 'HKD': 7.79725, 'NZD': 1.667779, 'base': 'USD'}, {'CNY': 7.871514, 'USD': 1.091643, 'JPY': 163.238875, 'GBP': 0.876329, 'AUD': 1.676099, 'CAD': 1.497898, 'HKD': 8.511814, 'NZD': 1.820619, 'base': 'EUR'}, {'CNY': 0.048221, 'USD': 0.006687, 'EUR': 0.006126, 'GBP': 0.005368, 'AUD': 0.010268, 'CAD': 0.009176, 'HKD': 0.052143, 'NZD': 0.011153, 'base': 'JPY'}, {'CNY': 8.982374, 'USD': 1.2457, 'EUR': 1.141124, 'JPY': 186.275798, 'AUD': 1.912636, 'CAD': 1.709288, 'HKD': 9.713035, 'NZD': 2.077552, 'base': 'GBP'}, {'CNY': 4.696331, 'USD': 0.6513, 'EUR': 0.596624, 'JPY': 97.392162, 'GBP': 0.522839, 'CAD': 0.893681, 'HKD': 5.078349, 'NZD': 1.086224, 'base': 'AUD'}, {'CNY': 5.255039, 'USD': 0.728783, 'EUR': 0.667602, 'JPY': 108.978605, 'GBP': 0.585039, 'AUD': 1.118967, 'HKD': 5.682504, 'NZD': 1.215449, 'base': 'CAD'}, {'CNY': 0.924775, 'USD': 0.12825, 'EUR': 0.117484, 'JPY': 19.177919, 'GBP': 0.102954, 'AUD': 0.196914, 'CAD': 0.175979, 'NZD': 0.213893, 'base': 'HKD'}, {'CNY': 4.323537, 'USD': 0.5996, 'EUR': 0.549264, 'JPY': 89.661187, 'GBP': 0.481336, 'AUD': 0.92062, 'CAD': 0.822741, 'HKD': 4.67523, 'base': 'NZD'}], 'date': '2023-11-18'}'''
+    cached_rate_matrix = JsonMatrixConvert.get_latest_cached_matrix()
+    currencies = RequestExchangeRate.currencies
+
+    numpy_matrix = np.array(cached_rate_matrix)
+    numpy_matrix = -np.log(numpy_matrix)
+    np.fill_diagonal(numpy_matrix, 0)
+
+    detect_negative_cycle(currencies, numpy_matrix)
+    matrix = [[0, 1, 0, 0, 0, 0, 0, 0, 0, 0]]
