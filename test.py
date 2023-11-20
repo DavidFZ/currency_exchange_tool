@@ -1,43 +1,90 @@
-class Edge():
-    def __init__(self,u,v,cost):
-        self.u = u
-        self.v = v
-        self.cost = cost
-nodenum = 5
+from util.json_matrix_convert import JsonMatrixConvert
+from util.request_exchange_rate import RequestExchangeRate
+from main import prepossess_matrix
 
-edgeList = []
-dis = [float("inf")]*nodenum
-pre = [-1]*nodenum
 
-edgeList.append(Edge(0,1,-1))
-edgeList.append(Edge(1,2,3))
-edgeList.append(Edge(3,1,1))
-edgeList.append(Edge(1,3,2))
-edgeList.append(Edge(1,4,2))
-edgeList.append(Edge(0,2,4))
-edgeList.append(Edge(3,2,5))
-edgeList.append(Edge(4,3,-3))
+class Graph:
+    def __init__(self, vertices):
+        self.V = vertices
+        self.edges = []
 
-edgenum = len(edgeList)
+    def add_edge(self, v, u, w):
+        self.edges.append((v, u, w))
 
-original = 0
-def Bellman_Ford(original):
-    #令起点到自身的距离为0
-    for i in range(nodenum):
-        if(i == original):
-            dis[i] = 0
-    print(dis,'\n')
-    for i in range(nodenum-1):
-        for j in range(edgenum):
-            if(dis[edgeList[j].v] > dis[edgeList[j].u] + edgeList[j].cost):
-                dis[edgeList[j].v] = dis[edgeList[j].u] + edgeList[j].cost
-                pre[edgeList[j].v] = edgeList[j].u
-        print('dis',dis)
-        print('pre',pre,'\n')
-    flag = True
-    for i in range(edgenum):
-        if(dis[edgeList[i].v] > dis[edgeList[i].u] + edgeList[i].cost):
-            flag = False
-            break
-    return flag
-print(Bellman_Ford(original))
+    def bellman_ford(self, src):
+        # Initialize distances
+        d = [float("Inf")] * (self.V + 1)  # starting from 1
+        d[src] = 0
+
+        # Repeat |V| - 1 times
+        for _ in range(self.V-1):
+            d_prime = list(d)  # Copy current distances to d'
+            #self.print_distances(d) # Print the intermediate distances for d.
+            for v, u, w in self.edges:
+                d_prime[u] = min(d_prime[u],d[v] + w)
+
+            d = d_prime  # Replace d by d'
+
+        # Print distances
+        self.print_distances(d)
+
+    def print_distances(self, dist):
+        print("Vertex Distance from Source")
+        for i in range(1, len(dist)):  # Start from 1
+            print("{0}\t\t{1}".format(i, dist[i]))
+
+#Test Example On Slide 21 (without negative cycle)
+
+graph = Graph(5)
+graph.add_edge(1, 2, 6)
+graph.add_edge(1, 4, 7)
+graph.add_edge(2, 3, 5)
+graph.add_edge(2, 4, 8)
+graph.add_edge(2, 5, -4)
+graph.add_edge(3, 2, -2)
+graph.add_edge(4, 3, -3)
+graph.add_edge(4, 5, 9)
+graph.add_edge(5, 1, 2)
+graph.add_edge(5, 3, 7)
+
+#Test Example On Slide 21 (modified with negative cycle)
+
+# graph = Graph(5)
+# graph.add_edge(1, 2, 6)
+# graph.add_edge(1, 4, 7)
+# graph.add_edge(2, 3, 5)
+# graph.add_edge(2, 4, 8)
+# graph.add_edge(2, 5, -6) #modified
+# graph.add_edge(3, 2, -2)
+# graph.add_edge(4, 3, -3)
+# graph.add_edge(4, 5, 9)
+# graph.add_edge(5, 1, 2)
+# graph.add_edge(5, 3, 7)
+
+# # Test Example on Slide 11 S=1, A=2, B=3, ..., G=8
+# graph = Graph(8)
+# graph.add_edge(1, 2, 10)
+# graph.add_edge(1, 8, 8)
+# graph.add_edge(2, 6, 2)
+# graph.add_edge(3, 2, 1)
+# graph.add_edge(3, 4, 1)
+# graph.add_edge(4, 5, 3)
+# graph.add_edge(5, 6, -1)
+# graph.add_edge(6, 3, -2)
+# graph.add_edge(7, 2, -4)
+# graph.add_edge(7, 6, -1)
+# graph.add_edge(8, 7, 1)
+
+
+cached_rate_matrix = JsonMatrixConvert.get_latest_cached_matrix()
+numpy_matrix = prepossess_matrix(cached_rate_matrix)
+
+currencies = RequestExchangeRate.currencies
+node_size = len(currencies)
+
+graph = Graph(node_size)
+for i in range(node_size):
+    for j in range(node_size):
+        graph.add_edge(i + 1, j + 1, numpy_matrix[i][j])
+
+graph.bellman_ford(1)
