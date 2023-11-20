@@ -8,15 +8,20 @@ currencies = RequestExchangeRate.currencies
 
 
 def detect_negative_cycle(matrix):
+    print()
     # bellman-ford algorithm
-    for _ in range(len(currencies)):
-        if single_source_detect_negative_cycle(matrix, _):
-            return True
-    return False
+    for _ in range(len(matrix)):
+        res = single_source_detect_negative_cycle(matrix, _)
+        if res[0]:
+            cycle = res[1]
+            print("There exists arbitrage opportunity in this currency exchange system.")
+            print(" -> ".join(currencies[i] for i in cycle))
+            print("Profit margin is " + str(calculate_profit(cycle, matrix)))
+            return
+    print("There is no arbitrage opportunity in this currency exchange system.")
 
 
 def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
-    src_rate = adjacency_matrix
     adjacency_matrix = negative_logarithm(adjacency_matrix)
 
     dis = [float("inf")] * len(adjacency_matrix)
@@ -33,13 +38,9 @@ def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
     for i in range(len(adjacency_matrix)):
         for j in range(len(adjacency_matrix)):
             if dis[j] > dis[i] + adjacency_matrix[i][j]:
-                print("There exists arbitrage opportunity in this currency exchange system.")
-                cycle = tracking_path(pre, i)
-                print(" -> ".join(currencies[i] for i in cycle))
-                print("Profit margin is " + str(calculate_profit(cycle, src_rate)))
-                return True
+                return True, tracking_path(pre, i)
 
-    return False
+    return False, None
 
 
 def tracking_path(predecessors, start_node):
@@ -64,11 +65,11 @@ def calculate_profit(cycle, src_rate):
 if __name__ == '__main__':
     # test case 1
     matrix = get_test_matrix_1()
-    single_source_detect_negative_cycle(matrix, 0)
+    detect_negative_cycle(matrix)
 
     # test case 2
     matrix = get_test_matrix_2()
-    single_source_detect_negative_cycle(matrix, 0)
+    detect_negative_cycle(matrix)
 
     # # real world case
     matrix = JsonMatrixConvert.get_latest_cached_matrix()

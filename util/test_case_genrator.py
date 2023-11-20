@@ -9,9 +9,9 @@ def get_test_matrix_1():
 
 
 def get_test_matrix_2():
-    return [[1, 0.75, 0.9],
-            [1.35, 1, 0.8],
-            [1.11, 1.3, 1]]
+    return [[1, 1, 1],
+            [1, 1, 1],
+            [1, 1, 1]]
 
 
 def get_real_world_rate_matrix():
