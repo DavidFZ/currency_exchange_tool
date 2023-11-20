@@ -36,13 +36,13 @@ def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
     return False
 
 if __name__ == '__main__':
-    # cached_rate_matrix = JsonMatrixConvert.get_latest_cached_matrix()
-    # currencies = RequestExchangeRate.currencies
-    #
+    cached_rate_matrix = JsonMatrixConvert.get_latest_cached_matrix()
+    currencies = RequestExchangeRate.currencies
+    print(cached_rate_matrix)
+
     # numpy_matrix = np.array(cached_rate_matrix)
     # numpy_matrix = -np.log(numpy_matrix)
     # np.fill_diagonal(numpy_matrix, 0)
     #
     # detect_negative_cycle(numpy_matrix)
 
-    matrix = []

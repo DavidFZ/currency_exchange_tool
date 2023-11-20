@@ -2,6 +2,7 @@ import datetime
 import json
 
 from util.time_util import TimeUtil
+import os
 
 
 class JsonPersistence:
@@ -25,9 +26,16 @@ class JsonPersistence:
 
     @staticmethod
     def load_latest_json():
-        file_name = TimeUtil.get_current_date() + ".json"
-        file_name = "./data/" + file_name
-        return JsonPersistence.load_json(file_name)
+        file_name = JsonPersistence.load_latest_file_name()
+        file_path = "./data/" + file_name
+        return JsonPersistence.load_json(file_path)
+
+    @staticmethod
+    def load_latest_file_name():
+        folder = "./data/"
+        files = os.listdir(folder)
+        files.sort(key=lambda x: os.path.getmtime(folder + x))
+        return files[-1]
 
 
 if __name__ == '__main__':
