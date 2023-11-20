@@ -2,6 +2,7 @@ import numpy as np
 
 from util.json_matrix_convert import JsonMatrixConvert
 from util.request_exchange_rate import RequestExchangeRate
+from util.test_case_genrator import *
 
 currencies = RequestExchangeRate.currencies
 
@@ -15,6 +16,9 @@ def detect_negative_cycle(matrix):
 
 
 def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
+    src_rate = adjacency_matrix
+    adjacency_matrix = negative_logarithm(adjacency_matrix)
+
     dis = [float("inf")] * len(adjacency_matrix)
     dis[source_node_index] = 0
     pre = [-1] * len(adjacency_matrix)
@@ -26,30 +30,46 @@ def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
                     dis[j] = dis[i] + adjacency_matrix[i][j]
                     pre[j] = i
 
-    for _ in dis:
-        print(_)
-
     for i in range(len(adjacency_matrix)):
         for j in range(len(adjacency_matrix)):
             if dis[j] > dis[i] + adjacency_matrix[i][j]:
                 print("There exists arbitrage opportunity in this currency exchange system.")
+                cycle = tracking_path(pre, i)
+                print(" -> ".join(currencies[i] for i in cycle))
+                print("Profit margin is " + str(calculate_profit(cycle, src_rate)))
                 return True
 
     return False
 
 
-def prepossess_matrix(matrix):
-    np_matrix = np.array(matrix)
-    np_matrix = -np.log(np_matrix)
-    np.fill_diagonal(np_matrix, 0)
-    return np_matrix
+def tracking_path(predecessors, start_node):
+    cycle = [start_node]
+    current_node = start_node
+    while predecessors[current_node] not in cycle:
+        current_node = predecessors[current_node]
+        cycle.append(current_node)
+    cycle = cycle[cycle.index(predecessors[current_node]):]
+    cycle = cycle[::-1]
+    cycle.append(cycle[0])
+    return cycle
+
+
+def calculate_profit(cycle, src_rate):
+    profit = 1
+    for i in range(len(cycle) - 1):
+        profit *= src_rate[cycle[i]][cycle[i + 1]]
+    return profit
 
 
 if __name__ == '__main__':
-    matrix = [[1, 0.651, 0.581], [1.531, 1, 0.952], [1.711, 1.049, 1]]
-    numpy_matrix = prepossess_matrix(matrix)
-    single_source_detect_negative_cycle(numpy_matrix, 0)
+    # test case 1
+    matrix = get_test_matrix_1()
+    single_source_detect_negative_cycle(matrix, 0)
 
-    # matrix = JsonMatrixConvert.get_latest_cached_matrix()
-    # numpy_matrix = prepossess_matrix(matrix)
-    # detect_negative_cycle(numpy_matrix)
+    # test case 2
+    matrix = get_test_matrix_2()
+    single_source_detect_negative_cycle(matrix, 0)
+
+    # # real world case
+    matrix = JsonMatrixConvert.get_latest_cached_matrix()
+    detect_negative_cycle(matrix)

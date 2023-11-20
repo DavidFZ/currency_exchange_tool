@@ -1,6 +1,6 @@
 from util.json_matrix_convert import JsonMatrixConvert
 from util.request_exchange_rate import RequestExchangeRate
-from main import prepossess_matrix
+from main import negative_logarithm
 
 
 class Graph:
