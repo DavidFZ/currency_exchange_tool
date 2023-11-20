@@ -26,7 +26,6 @@ def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
                 dis[j] = dis[i] + adjacency_matrix[i][j]
                 pre[j] = i
 
-
     for i in range(len(adjacency_matrix)):
         for j in range(len(adjacency_matrix)):
             if dis[j] > dis[i] + adjacency_matrix[i][j]:
@@ -35,14 +34,18 @@ def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
 
     return False
 
+def prepossess_matrix(matrix):
+    np_matrix = np.array(matrix)
+    np_matrix = -np.log(np_matrix)
+    np.fill_diagonal(np_matrix, 0)
+    return np_matrix
+
+
 if __name__ == '__main__':
     cached_rate_matrix = JsonMatrixConvert.get_latest_cached_matrix()
     currencies = RequestExchangeRate.currencies
     print(cached_rate_matrix)
 
-    # numpy_matrix = np.array(cached_rate_matrix)
-    # numpy_matrix = -np.log(numpy_matrix)
-    # np.fill_diagonal(numpy_matrix, 0)
-    #
+    numpy_matrix = prepossess_matrix(cached_rate_matrix)
+    print(numpy_matrix)
     # detect_negative_cycle(numpy_matrix)
-
