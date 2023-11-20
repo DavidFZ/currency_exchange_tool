@@ -17,11 +17,11 @@ class Graph:
         d[src] = 0
 
         # Repeat |V| - 1 times
-        for _ in range(self.V-1):
+        for _ in range(self.V - 1):
             d_prime = list(d)  # Copy current distances to d'
-            #self.print_distances(d) # Print the intermediate distances for d.
+            # self.print_distances(d) # Print the intermediate distances for d.
             for v, u, w in self.edges:
-                d_prime[u] = min(d_prime[u],d[v] + w)
+                d_prime[u] = min(d_prime[u], d[v] + w)
 
             d = d_prime  # Replace d by d'
 
@@ -33,7 +33,8 @@ class Graph:
         for i in range(1, len(dist)):  # Start from 1
             print("{0}\t\t{1}".format(i, dist[i]))
 
-#Test Example On Slide 21 (without negative cycle)
+
+# Test Example On Slide 21 (without negative cycle)
 
 graph = Graph(5)
 graph.add_edge(1, 2, 6)
@@ -47,7 +48,7 @@ graph.add_edge(4, 5, 9)
 graph.add_edge(5, 1, 2)
 graph.add_edge(5, 3, 7)
 
-#Test Example On Slide 21 (modified with negative cycle)
+# Test Example On Slide 21 (modified with negative cycle)
 
 # graph = Graph(5)
 # graph.add_edge(1, 2, 6)
@@ -76,15 +77,29 @@ graph.add_edge(5, 3, 7)
 # graph.add_edge(8, 7, 1)
 
 
-cached_rate_matrix = JsonMatrixConvert.get_latest_cached_matrix()
-numpy_matrix = prepossess_matrix(cached_rate_matrix)
+# cached_rate_matrix = JsonMatrixConvert.get_latest_cached_matrix()
+# numpy_matrix = prepossess_matrix(cached_rate_matrix)
+#
+# currencies = RequestExchangeRate.currencies
+# node_size = len(currencies)
+#
+# graph = Graph(node_size)
+# for i in range(node_size):
+#     for j in range(node_size):
+#         graph.add_edge(i + 1, j + 1, numpy_matrix[i][j])
+#
+# graph.bellman_ford(1)
 
-currencies = RequestExchangeRate.currencies
-node_size = len(currencies)
 
-graph = Graph(node_size)
-for i in range(node_size):
-    for j in range(node_size):
-        graph.add_edge(i + 1, j + 1, numpy_matrix[i][j])
+graph = Graph(3)
+graph.add_edge(1, 1, 1)
+graph.add_edge(1, 2, 0.651)
+graph.add_edge(1, 3, 0.581)
+graph.add_edge(2, 1, 1.531)
+graph.add_edge(2, 2, 1)
+graph.add_edge(2, 3, 0.952)
+graph.add_edge(3, 1, 1.711)
+graph.add_edge(3, 2, 1.049)
+graph.add_edge(3, 3, 1)
 
 graph.bellman_ford(1)
