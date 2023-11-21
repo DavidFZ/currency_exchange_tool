@@ -13,10 +13,13 @@ def detect_negative_cycle(matrix):
     for _ in range(len(matrix)):
         res = single_source_detect_negative_cycle(matrix, _)
         if res[0]:
-            cycle = res[1]
-            print("There exists arbitrage opportunity in this currency exchange system.")
-            print(" -> ".join(currencies[i] for i in cycle))
-            print("Profit margin is " + str(calculate_profit(cycle, matrix)))
+            cycles = res[1]
+            # convert list to set
+            cycles = [set(cycle) for cycle in cycles]
+            for cycle in cycles:
+                print("There exists arbitrage opportunity in this currency exchange system.")
+                print(" -> ".join(currencies[i] for i in cycle))
+                print("Profit margin is " + str(calculate_profit(cycle, matrix)))
             return
     print("There is no arbitrage opportunity in this currency exchange system.")
 
@@ -35,12 +38,15 @@ def single_source_detect_negative_cycle(adjacency_matrix, source_node_index):
                     dis[j] = dis[i] + adjacency_matrix[i][j]
                     pre[j] = i
 
+    flag = False
+    potential_path = []
     for i in range(len(adjacency_matrix)):
         for j in range(len(adjacency_matrix)):
             if dis[j] > dis[i] + adjacency_matrix[i][j]:
-                return True, tracking_path(pre, i)
+                flag = True
+                potential_path.append(tracking_path(pre, i))
 
-    return False, None
+    return flag, potential_path
 
 
 def tracking_path(predecessors, start_node):
