@@ -19,7 +19,7 @@ class JsonPersistence:
 
     @staticmethod
     def request_rate_and_save(file_name=TimeUtil.get_current_date() + ".json"):
-        file_name = "../data/" + file_name
+        file_name = "./data/" + file_name
         from util.request_exchange_rate import RequestExchangeRate
         requested_json = RequestExchangeRate.batch_request_exchange_rate()
         JsonPersistence.save_json(requested_json, file_name)

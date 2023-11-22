@@ -1,6 +1,7 @@
 import numpy as np
 
 from util.json_matrix_convert import JsonMatrixConvert
+from util.json_persistence import JsonPersistence
 from util.request_exchange_rate import RequestExchangeRate
 from util.test_case_genrator import *
 
@@ -77,6 +78,11 @@ if __name__ == '__main__':
     matrix = get_test_matrix_2()
     detect_negative_cycle(matrix)
 
-    # # real world case
+    # use cached real world rate data case
+    matrix = JsonMatrixConvert.get_latest_cached_matrix()
+    detect_negative_cycle(matrix)
+
+    # request latest rate and calculate chain
+    JsonPersistence.request_rate_and_save()
     matrix = JsonMatrixConvert.get_latest_cached_matrix()
     detect_negative_cycle(matrix)
