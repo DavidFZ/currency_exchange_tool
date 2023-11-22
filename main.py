@@ -15,11 +15,11 @@ def detect_negative_cycle(matrix):
         if res[0]:
             cycles = res[1]
             # convert list to set
-            cycles = [set(cycle) for cycle in cycles]
+            cycles = set(map(tuple, cycles))
             for cycle in cycles:
                 print("There exists arbitrage opportunity in this currency exchange system.")
                 print(" -> ".join(currencies[i] for i in cycle))
-                print("Profit margin is " + str(calculate_profit(cycle, matrix)))
+                print("Profit margin is " + str(calculate_profit(list(cycle), matrix)))
             return
     print("There is no arbitrage opportunity in this currency exchange system.")
 
