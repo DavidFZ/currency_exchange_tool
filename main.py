@@ -3,7 +3,7 @@ import numpy as np
 from util.json_matrix_convert import JsonMatrixConvert
 from util.json_persistence import JsonPersistence
 from util.request_exchange_rate import RequestExchangeRate
-from util.test_case_genrator import *
+from util.test_case_generator import *
 
 currencies = RequestExchangeRate.currencies
 
