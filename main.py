@@ -4,6 +4,7 @@ from util.json_matrix_convert import JsonMatrixConvert
 from util.json_persistence import JsonPersistence
 from util.request_exchange_rate import RequestExchangeRate
 from util.test_case_generator import *
+from util.pilot import plot_matrix
 
 currencies = RequestExchangeRate.currencies
 
@@ -82,7 +83,4 @@ if __name__ == '__main__':
     matrix = JsonMatrixConvert.get_latest_cached_matrix()
     detect_negative_cycle(matrix)
 
-    # request latest rate and calculate chain
-    JsonPersistence.request_rate_and_save()
-    matrix = JsonMatrixConvert.get_latest_cached_matrix()
-    detect_negative_cycle(matrix)
+    plot_matrix(matrix)
