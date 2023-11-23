@@ -40,10 +40,37 @@
             Profit margin is 1.00000051326
         ```
 
+### Details
+    
+    In this project, we implement the shortest path algorithm.
+
+    By using Bellman-Ford algorithm, we implement the function of detecting arbitrage opportunities in a currency exchange system.
+
+    
+    
+    In this project, we test our implemention by passing test cases.
+    
+    Our test cases include two genrated test cases, and real world currency exchange rate.
+    
+    All real world datas are requested from exchangeratesapi.io, and we save json file as cache.
+
+    
+    In this project, we read the cache json file and use numpy to convert to currency exchange rate matrix.
+    
+    In our main function, we use matrix to storage the weight of currency exchange graph.
+    
+    By using Bellman - ford algorithm, we detect negatice cycle and use array to record the predecessor node information.
+    
+    
+    
+
+    
+    
+
 ### Algorithm
     
-        The algorithm used in this program is Bellman-Ford algorithm, which is a single-source shortest path algorithm.
-        The algorithm is used to detect negative cycles in the graph, which means there exists arbitrage opportunity in the currency exchange system.
+    The algorithm used in this program is Bellman-Ford algorithm, which is a single-source shortest path algorithm.
+    The algorithm is used to detect negative cycles in the graph, which means there exists arbitrage opportunity in the currency exchange system.
 
 ### Project Structure
     ```
