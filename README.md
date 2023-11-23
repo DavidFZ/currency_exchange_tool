@@ -16,9 +16,9 @@ This project implements a program that detects arbitrage opportunities in curren
       ```python main.py```
 3. Check the output result
     - The program will output the result to the console.
-      ![img.png](imgs/img.png)
+      - ![img.png](imgs/img.png)
     - The program will request and generate the real world exchange rate matrix as input.
-      ![matrix.png](matrix.png)
+      - ![matrix.png](matrix.png)
       - According to the exchange rate, we can simply find that there is exists arbitrage opportunities.
       - It is clear that the program calculate and print out potential arbitrage opportunities exchange path.
     - For generated currency tables (test case 1 & 2), matrix is in the 'test_case_generator.py'
@@ -31,17 +31,19 @@ This project implements a program that detects arbitrage opportunities in curren
 ### Program Design Details
 
     In this project, we implement the shortest path algorithm.
-
+    
     By using Bellman-Ford algorithm, we implement the function of detecting arbitrage opportunities in a currency exchange system.
 
-    
+
+​    
     In this project, we test our implemention by passing test cases.
     
     Our test cases include two genrated test cases, and real world currency exchange rate.
     
     All real world datas are requested from exchangeratesapi.io, and we save json file as cache.
 
-    
+
+​    
     In this project, we read the cache json file and use numpy to convert to currency exchange rate matrix.
     
     In our main function, we use matrix to storage the weight of currency exchange graph.
@@ -57,9 +59,11 @@ currency exchange system.
 The main idea of Bellman-Ford algorithm is to relax all edges for |V| - 1 times, where |V| is the number of vertices in
 the graph.
 The state transition equation is:
-$$ d[v] = min(d[v], d[u] + w(u, v)) $$
+$$
+d[v] = min(d[v], d[u] + w(u, v))
+$$
 where d[v] is the shortest distance from source vertex to vertex v, d[u] is the shortest distance from source vertex to
-vertex u, w(u, v) is the weight of edge (u, v).
+vertex u, w(u, v) is the weight of edge (u, v).        
 
 ### External Liberal Usage
 
@@ -89,4 +93,3 @@ The program is written in Python 3.9.18, using the following libraries:
     ├── test_case_generator.py # generate test cases
     └── time_util.py   # time utility
 ```
-    
