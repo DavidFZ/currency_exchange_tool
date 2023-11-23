@@ -4,6 +4,11 @@ from util.json_matrix_convert import JsonMatrixConvert
 from util.request_exchange_rate import RequestExchangeRate
 
 def plot_matrix(matrix):
+    """
+    draw matrix diagram
+
+    :param matrix: exchange rate matrix
+    """
     plt.matshow(matrix)
 
     # set the col and row label of the matrix
